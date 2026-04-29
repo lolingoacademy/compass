@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lolingo Compass — Find Your English</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #1a1814;
+      --paper: #f7f4ef;
+      --cream: #ede9e1;
+      --accent: #c8502a;
+      --accent-light: #f2e8e3;
+      --gold: #b89a5a;
+      --muted: #7a7569;
+      --border: #ddd8ce;
+      --card-bg: #fdfcfa;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    nav {
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      background: var(--paper);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .logo-main {
+      font-family: 'Instrument Serif', serif;
+      font-size: 22px;
+      color: var(--ink);
+      letter-spacing: -0.3px;
+    }
+
+    .logo-sub {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 300;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .nav-right {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    /* HERO */
+    .hero {
+      padding: 64px 40px 40px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .hero-eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 16px;
+    }
+
+    .hero h1 {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(36px, 5vw, 56px);
+      line-height: 1.1;
+      letter-spacing: -0.5px;
+      color: var(--ink);
+      max-width: 640px;
+      margin-bottom: 16px;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero-sub {
+      font-size: 15px;
+      color: var(--muted);
+      font-weight: 300;
+      line-height: 1.6;
+      max-width: 480px;
+    }
+
+    /* FILTER BAR */
+    .filter-section {
+      padding: 0 40px 32px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .filter-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 12px;
+      font-weight: 500;
+    }
+
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .filter-btn {
+      padding: 7px 14px;
+      border: 1px solid var(--border);
+      border-radius: 40px;
+      background: var(--card-bg);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.15s;
+      font-weight: 400;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--ink);
+      color: var(--ink);
+    }
+
+    .filter-btn.active {
+      background: var(--ink);
+      border-color: var(--ink);
+      color: var(--paper);
+    }
+
+    .filter-btn.level-a { --active-bg: #4a7c59; }
+    .filter-btn.level-b { --active-bg: #4a6a8a; }
+    .filter-btn.level-c { --active-bg: #7a4a8a; }
+    .filter-btn.level-a.active { background: #4a7c59; border-color: #4a7c59; }
+    .filter-btn.level-b.active { background: #4a6a8a; border-color: #4a6a8a; }
+    .filter-btn.level-c.active { background: #7a4a8a; border-color: #7a4a8a; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 16px 0;
+    }
+
+    /* RESULTS COUNT */
+    .results-bar {
+      padding: 0 40px 20px;
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .results-count {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .results-count span {
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    .clear-btn {
+      font-size: 12px;
+      color: var(--accent);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      display: none;
+    }
+
+    .clear-btn.visible { display: block; }
+
+    /* GRID */
+    .grid {
+      padding: 0 40px 80px;
+      max-width: 960px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    /* CARD */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(26,24,20,0.08);
+      border-color: var(--gold);
+    }
+
+    .card-thumb {
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-thumb::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: inherit;
+      opacity: 0.12;
+    }
+
+    .card-body { padding: 16px 18px 18px; }
+
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-bottom: 10px;
+    }
+
+    .ctag {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+    }
+
+    .ctag-level-a { background: #e4f0e8; color: #2d5c3b; }
+    .ctag-level-b { background: #e0eaf5; color: #1e4470; }
+    .ctag-level-c { background: #ede0f5; color: #5a2d70; }
+    .ctag-topic { background: var(--cream); color: var(--muted); }
+    .ctag-format { background: var(--accent-light); color: var(--accent); }
+
+    .card-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: 17px;
+      line-height: 1.3;
+      color: var(--ink);
+      margin-bottom: 6px;
+      letter-spacing: -0.2px;
+    }
+
+    .card-meta {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 300;
+    }
+
+    .card-footer {
+      padding: 12px 18px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-duration {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .card-arrow {
+      font-size: 16px;
+      color: var(--gold);
+      transition: transform 0.2s;
+    }
+
+    .card:hover .card-arrow { transform: translateX(4px); }
+
+    /* EMPTY STATE */
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 60px 20px;
+      display: none;
+    }
+
+    .empty-state.visible { display: block; }
+
+    .empty-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+
+    .empty-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: 22px;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+
+    .empty-sub {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    /* HIDDEN */
+    .card.hidden { display: none; }
+
+    @media (max-width: 600px) {
+      nav { padding: 16px 20px; }
+      .hero { padding: 40px 20px 28px; }
+      .filter-section { padding: 0 20px 24px; }
+      .results-bar { padding: 0 20px 16px; }
+      .grid { padding: 0 20px 60px; grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">
+    <span class="logo-main">Lolingo</span>
+    <span class="logo-sub">Compass</span>
+  </div>
+  <div class="nav-right">English for every learner</div>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">Find your material</div>
+  <h1>The right English,<br/><em>for exactly you.</em></h1>
+  <p class="hero-sub">Filter by your level, age, topic, and format. Every piece comes with audio, transcript, vocabulary, culture notes, and a quiz.</p>
+</div>
+
+<div class="filter-section">
+  <div class="filter-label">Level</div>
+  <div class="filter-row" id="filter-level">
+    <button class="filter-btn level-a" data-filter="level" data-value="A1">A1 Beginner</button>
+    <button class="filter-btn level-a" data-filter="level" data-value="A2">A2 Elementary</button>
+    <button class="filter-btn level-b" data-filter="level" data-value="B1">B1 Intermediate</button>
+    <button class="filter-btn level-b" data-filter="level" data-value="B2">B2 Upper-Intermediate</button>
+    <button class="filter-btn level-c" data-filter="level" data-value="C1">C1 Advanced</button>
+  </div>
+
+  <hr class="divider" />
+
+  <div class="filter-label">Age group</div>
+  <div class="filter-row" id="filter-age">
+    <button class="filter-btn" data-filter="age" data-value="children">Young children (6–10)</button>
+    <button class="filter-btn" data-filter="age" data-value="teens">Teenagers (11–17)</button>
+    <button class="filter-btn" data-filter="age" data-value="adults">Adults</button>
+    <button class="filter-btn" data-filter="age" data-value="professional">Professionals</button>
+  </div>
+
+  <hr class="divider" />
+
+  <div class="filter-label">Topic</div>
+  <div class="filter-row" id="filter-topic">
+    <button class="filter-btn" data-filter="topic" data-value="history">History</button>
+    <button class="filter-btn" data-filter="topic" data-value="science">Science</button>
+    <button class="filter-btn" data-filter="topic" data-value="news">News</button>
+    <button class="filter-btn" data-filter="topic" data-value="culture">Culture</button>
+    <button class="filter-btn" data-filter="topic" data-value="daily">Daily life</button>
+    <button class="filter-btn" data-filter="topic" data-value="politics">Politics</button>
+    <button class="filter-btn" data-filter="topic" data-value="business">Business</button>
+    <button class="filter-btn" data-filter="topic" data-value="nature">Nature</button>
+  </div>
+
+  <hr class="divider" />
+
+  <div class="filter-label">Format</div>
+  <div class="filter-row" id="filter-format">
+    <button class="filter-btn" data-filter="format" data-value="video">📹 Video</button>
+    <button class="filter-btn" data-filter="format" data-value="audio">🎧 Audio</button>
+    <button class="filter-btn" data-filter="format" data-value="article">📄 Article</button>
+  </div>
+</div>
+
+<div class="results-bar">
+  <div class="results-count"><span id="count">6</span> materials found</div>
+  <button class="clear-btn" id="clear-btn" onclick="clearFilters()">Clear all filters ×</button>
+</div>
+
+<div class="grid" id="grid">
+
+  <a class="card" href="materials/rome.html"
+     data-level="B1" data-age="teens adults" data-topic="history culture" data-format="video">
+    <div class="card-thumb" style="background: linear-gradient(135deg, #8B4513, #CD853F);">🏛️</div>
+    <div class="card-body">
+      <div class="card-tags">
+        <span class="ctag ctag-level-b">B1</span>
+        <span class="ctag ctag-topic">History</span>
+        <span class="ctag ctag-format">Video</span>
+      </div>
+      <div class="card-title">Why Did the Roman Empire Fall?</div>
+      <div class="card-meta">CrashCourse · American accent</div>
+    </div>
+    <div class="card-footer">
+      <span class="card-duration">12 min</span>
+      <span class="card-arrow">→</span>
+    </div>
+  </a>
+
+  <a class="card" href="materials/bbc-news.html"
+     data-level="B2" data-age="adults professional" data-topic="news politics" data-format="video">
+    <div class="card-thumb" style="background: linear-gradient(135deg, #1a3a5c, #2e6da4);">📺</div>
+    <div class="card-body">
+      <div class="card-tags">
+        <span class="ctag ctag-level-b">B2</span>
+        <span class="ctag ctag-topic">News</span>
+        <span class="ctag ctag-format">Video</span>
+      </div>
+      <div class="card-title">Climate Summit: What World Leaders Agreed</div>
+      <div class="card-meta">BBC News · British accent</div>
+    </div>
+    <div class="card-footer">
+      <span class="card-duration">6 min</span>
+      <span class="card-arrow">→</span>
+    </div>
+  </a>
+
+  <a class="card" href="materials/animals.html"
+     data-level="A1" data-age="children" data-topic="nature science" data-format="video">
+    <div class="card-thumb" style="background: linear-gradient(135deg, #2d7a4f, #5aad7a);">🐘</div>
+    <div class="card-body">
+      <div class="card-tags">
+        <span class="ctag ctag-level-a">A1</span>
+        <span class="ctag ctag-topic">Nature</span>
+        <span class="ctag ctag-format">Video</span>
+      </div>
+      <div class="card-title">Amazing Animals of Africa</div>
+      <div class="card-meta">National Geographic Kids · Clear English</div>
+    </div>
+    <div class="card-footer">
+      <span class="card-duration">5 min</span>
+      <span class="card-arrow">→</span>
+    </div>
+  </a>
+
+  <a class="card" href="materials/ted-happiness.html"
+     data-level="C1" data-age="adults professional" data-topic="science culture" data-format="video">
+    <div class="card-thumb" style="background: linear-gradient(135deg, #6b2fa0, #a855f7);">🧠</div>
+    <div class="card-body">
+      <div class="card-tags">
+        <span class="ctag ctag-level-c">C1</span>
+        <span class="ctag ctag-topic">Science</span>
+        <span class="ctag ctag-format">Video</span>
+      </div>
+      <div class="card-title">The Science of Happiness</div>
+      <div class="card-meta">TED Talk · American accent</div>
+    </div>
+    <div class="card-footer">
+      <span class="card-duration">18 min</span>
+      <span class="card-arrow">→</span>
+    </div>
+  </a>
+
+  <a class="card" href="materials/daily-shopping.html"
+     data-level="A2" data-age="children teens" data-topic="daily" data-format="audio">
+    <div class="card-thumb" style="background: linear-gradient(135deg, #c87533, #f0a060);">🛒</div>
+    <div class="card-body">
+      <div class="card-tags">
+        <span class="ctag ctag-level-a">A2</span>
+        <span class="ctag ctag-topic">Daily life</span>
+        <span class="ctag ctag-format">Audio</span>
+      </div>
+      <div class="card-title">At the Supermarket</div>
+      <div class="card-meta">Lolingo Original · Clear English</div>
+    </div>
+    <div class="card-footer">
+      <span class="card-duration">4 min</span>
+      <span class="card-arrow">→</span>
+    </div>
+  </a>
+
+  <a class="card" href="materials/economist.html"
+     data-level="C1" data-age="adults professional" data-topic="business politics" data-format="article">
+    <div class="card-thumb" style="background: linear-gradient(135deg, #8a1a1a, #c43030);">📰</div>
+    <div class="card-body">
+      <div class="card-tags">
+        <span class="ctag ctag-level-c">C1</span>
+        <span class="ctag ctag-topic">Business</span>
+        <span class="ctag ctag-format">Article</span>
+      </div>
+      <div class="card-title">The Future of Global Trade</div>
+      <div class="card-meta">The Economist · Written English</div>
+    </div>
+    <div class="card-footer">
+      <span class="card-duration">10 min read</span>
+      <span class="card-arrow">→</span>
+    </div>
+  </a>
+
+  <div class="empty-state" id="empty-state">
+    <div class="empty-icon">🧭</div>
+    <div class="empty-title">No materials found</div>
+    <div class="empty-sub">Try removing some filters to see more content.</div>
+  </div>
+
+</div>
+
+<script>
+  const activeFilters = { level: null, age: null, topic: null, format: null };
+
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const type = btn.dataset.filter;
+      const val = btn.dataset.value;
+
+      if (activeFilters[type] === val) {
+        activeFilters[type] = null;
+        btn.classList.remove('active');
+      } else {
+        document.querySelectorAll(`[data-filter="${type}"]`).forEach(b => b.classList.remove('active'));
+        activeFilters[type] = val;
+        btn.classList.add('active');
+      }
+
+      applyFilters();
+    });
+  });
+
+  function applyFilters() {
+    const cards = document.querySelectorAll('.card');
+    let visible = 0;
+
+    cards.forEach(card => {
+      const level = card.dataset.level;
+      const age = card.dataset.age;
+      const topic = card.dataset.topic;
+      const format = card.dataset.format;
+
+      const matchLevel = !activeFilters.level || level === activeFilters.level;
+      const matchAge = !activeFilters.age || age.includes(activeFilters.age);
+      const matchTopic = !activeFilters.topic || topic.includes(activeFilters.topic);
+      const matchFormat = !activeFilters.format || format === activeFilters.format;
+
+      if (matchLevel && matchAge && matchTopic && matchFormat) {
+        card.classList.remove('hidden');
+        visible++;
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+
+    document.getElementById('count').textContent = visible;
+
+    const hasFilters = Object.values(activeFilters).some(v => v !== null);
+    document.getElementById('clear-btn').classList.toggle('visible', hasFilters);
+    document.getElementById('empty-state').classList.toggle('visible', visible === 0);
+  }
+
+  function clearFilters() {
+    Object.keys(activeFilters).forEach(k => activeFilters[k] = null);
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    applyFilters();
+  }
+</script>
+</body>
+</html>
